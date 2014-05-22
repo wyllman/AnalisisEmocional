@@ -3,6 +3,8 @@
 .settings
 .classpath
 
+# archivos de texto de entrenamiento
+doc/CorpusEntrenamiento/
 
 *.class
 
