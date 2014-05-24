@@ -19,5 +19,6 @@ crear un sistema de análisis que se encargue de clasificar un
 texto de entrada como una de las dos posibilidades.
 
 Autores: 
+
          Juan Henández Hernández
          Guillermo Rodríguez Pardo
