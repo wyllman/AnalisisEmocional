@@ -109,6 +109,7 @@ public class PCorpus {
             if (null != outFile) {
                outFile.close ();
             }
+            filesGroup.removeAllElements();
          } catch (Exception e2) {
             e2.printStackTrace();
          }
