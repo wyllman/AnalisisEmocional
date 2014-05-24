@@ -3,13 +3,16 @@
  */
 package es.ull.etsii.iaa.proyecto.fases;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import sun.security.util.Length;
 
 /**
  * Clase encargada de unificar todos los documentos pertenecientes 
@@ -26,35 +29,27 @@ import sun.security.util.Length;
  */
 
 public class PCorpus {
-   public enum T_Ejecucion {C_SIMPLE, C_TODO };	
+   public enum T_Ejecution {C_SIMPLE, C_ALL };	
 
-   public Vector<File> buscarCarpeta (String nombreCarpeta) {
-      // TODO:
-      File carpetaCont = new File (nombreCarpeta);
-      Vector<File> resultado = new Vector<File> ();
-      Pattern patron = Pattern.compile(".*\\.txt$");
-      Matcher mat;// = pat.matcher(cadena);
+   public Vector<File> searchFolder (String folderName) {
+      File folderTmp = new File (folderName);
+      Vector<File> result = new Vector<File> ();
+      Pattern regExp = Pattern.compile(".*\\.txt$"); // Se usa para buscar los archivos que acaben con ".txt"
+      Matcher matching;
       boolean encontrado = false;
+      File archivoTmp;
       
-      if (carpetaCont.exists()){ 
-         System.out.println("La carpeta seleccionada es: " + carpetaCont.getName());
-         System.out.println("La carpeta seleccionada es: " + carpetaCont.getAbsolutePath());
-         System.out.println("La carpeta seleccionada es: " + carpetaCont.isDirectory());
-         try {
-            System.out.println("La carpeta seleccionada es: " + carpetaCont.getCanonicalPath());
-         } catch (IOException e) {
-            e.printStackTrace();
-         }
-         System.out.println("La carpeta seleccionada es: " + carpetaCont.getParent());
-         String[] resultadoC = carpetaCont.list();
+      if (folderTmp.exists()){ 
+         String[] resultadoC = folderTmp.list();
          int tamanio = resultadoC.length;
+         
          for (int i = 0; i < tamanio; ++i) {
-           mat = patron.matcher(resultadoC[i]);
-           if (mat.matches()) {
-              System.out.println(resultadoC[i]);
+           matching = regExp.matcher(resultadoC[i]);
+           if (matching.matches()) {
+              archivoTmp = new File(resultadoC[i]);
+              result.add(archivoTmp);
               encontrado = true;
            }
-            //System.out.println(resultadoC[i]);
          }
          if (!encontrado) {
             System.out.println(" Ningœn archivo .txt");
@@ -64,11 +59,64 @@ public class PCorpus {
          System.out.println(" --- +++++++ Clase: PCorpus Fucion: public " 
                               + "Vector<File> buscarCarpeta (String nombreCarpeta)");
       }
-
-      return resultado;
+      return result;
    }
    
-   public void unificarArchivos () {
-      // TODO:
+   public void addFile (File inFile, FileWriter outFile) {
+      FileReader fileRe = null;
+      BufferedReader buffRe = null;
+      
+      //FileWriter fileWr = null;
+      PrintWriter printWr = null;
+ 
+      try {
+         fileRe = new FileReader (inFile);
+         buffRe = new BufferedReader (fileRe);
+         
+         //fileWr = new FileWriter (outFile);
+         printWr = new PrintWriter (outFile);
+
+         String line;
+         if ((line = buffRe.readLine()) != null) {
+            System.out.println (line);
+            printWr.println ("Texto: " + line);
+            
+            while ((line = buffRe.readLine()) != null) {
+               System.out.println (line);
+               printWr.println (line);
+            }
+            
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+      } finally {
+         try {                   
+            if (null != fileRe) {  
+               fileRe.close();    
+            }                 
+         } catch (Exception e2) {
+            e2.printStackTrace();
+         }
+      }
+   }
+   
+   public void addFolderFiles (Vector<File> filesGroup, String nameOutFile) {
+      FileWriter outFile = null;
+      try {
+         outFile = new FileWriter (nameOutFile);
+         for (int i = 0; i < filesGroup.size(); ++i) {
+           addFile (filesGroup.get(i), outFile);
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      } finally {
+         try {
+            if (null != outFile) {
+               outFile.close ();
+            }
+         } catch (Exception e2) {
+            e2.printStackTrace();
+         }
+      }
    }
 }

@@ -3,6 +3,10 @@
  */
 package es.ull.etsii.iaa.proyecto.pruebas;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Vector;
+
 import es.ull.etsii.iaa.proyecto.fases.PCorpus;
 
 /**
@@ -21,7 +25,15 @@ public class EjecutarPruebas {
    public static void main(String[] args) {
       PCorpus programaCorpusPrueba = new PCorpus ();
       
-      programaCorpusPrueba.buscarCarpeta(".");
+      Vector<File> prueba = programaCorpusPrueba.searchFolder("doc/CorpusEntrenamiento/negativo/");
+      
+      for (int i = 0; i < prueba.size(); ++i) {
+         try {
+            System.out.println("Arch: " + i + "Nomb: " + prueba.get(i).getCanonicalPath());
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+      }
       
       System.out.println(" --- Fin de ejecucion --- ");
    }
