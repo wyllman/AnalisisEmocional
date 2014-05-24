@@ -65,18 +65,14 @@ public class PCorpus {
    public void addFile (File inFile, FileWriter outFile) {
       FileReader fileRe = null;
       BufferedReader buffRe = null;
-      
-      //FileWriter fileWr = null;
       PrintWriter printWr = null;
- 
+      String line;
+      
       try {
          fileRe = new FileReader (inFile);
          buffRe = new BufferedReader (fileRe);
-         
-         //fileWr = new FileWriter (outFile);
          printWr = new PrintWriter (outFile);
 
-         String line;
          if ((line = buffRe.readLine()) != null) {
             System.out.println (line);
             printWr.println ("Texto: " + line);
@@ -85,7 +81,6 @@ public class PCorpus {
                System.out.println (line);
                printWr.println (line);
             }
-            
          }
       } catch (Exception e) {
          e.printStackTrace();
@@ -111,6 +106,48 @@ public class PCorpus {
          e.printStackTrace();
       } finally {
          try {
+            if (null != outFile) {
+               outFile.close ();
+            }
+         } catch (Exception e2) {
+            e2.printStackTrace();
+         }
+      }
+   }
+   
+   public void createCorpusTodo (String nameFilePos, String nameFileNeg, String nameOutFile) {
+      FileReader filePos = null;
+      FileReader fileNeg = null;
+      FileWriter outFile = null;
+      BufferedReader buffRe = null;
+      PrintWriter printWr = null;
+      String line;
+      
+      try {
+         filePos = new FileReader(nameFilePos);
+         fileNeg = new FileReader(nameFileNeg);
+         outFile = new FileWriter (nameOutFile);
+         printWr = new PrintWriter (outFile);
+         
+         buffRe = new BufferedReader (filePos);
+         while ((line = buffRe.readLine()) != null) {
+             printWr.println (line);
+          }
+         
+         buffRe = new BufferedReader (fileNeg);
+         while ((line = buffRe.readLine()) != null) {
+             printWr.println (line);
+          }
+      } catch (Exception e) {
+         e.printStackTrace();
+      } finally {
+         try {
+            if (null != filePos) {
+               filePos.close ();
+            }
+            if (null != fileNeg) {
+               fileNeg.close ();
+            }
             if (null != outFile) {
                outFile.close ();
             }
