@@ -4,10 +4,6 @@
 package es.ull.etsii.iaa.proyecto.interfaz;
 
 
-
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
 import javax.swing.JFrame;
 
 import es.ull.etsii.ull.interfaz.graficos.componentes.BarraMenu;
@@ -17,6 +13,7 @@ import es.ull.etsii.ull.interfaz.graficos.componentes.BarraMenu;
  * @author Guillermo Rodr’guez Pardo
  *
  */
+@SuppressWarnings("serial")
 public class VentanaPrincipal extends JFrame {
    //_____________________________________
    // Atributos constantes predeterminados
@@ -59,7 +56,7 @@ public class VentanaPrincipal extends JFrame {
       setElMenu_(new BarraMenu (this));
       add(getElMenu_());
       
-      //setResizable(false);
+      setResizable(false);
       //setSize(ancho, alto + 50);
       setVisible (true);
    }

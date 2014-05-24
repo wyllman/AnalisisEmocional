@@ -18,6 +18,7 @@ import es.ull.etsii.iaa.proyecto.interfaz.VentanaPrincipal;
  * @author Guillermo Rodr’guez Pardo
  *
  */
+@SuppressWarnings("serial")
 public class BarraMenu extends JMenuBar {
    //______________________________________
    // Atributos constantes predeterminados:
@@ -45,12 +46,20 @@ public class BarraMenu extends JMenuBar {
    public void setmArchivo_(JMenu mArchivo_) {
       this.mArchivo_ = mArchivo_;
    }
+   public JMenu getmAyuda_() {
+      return mAyuda_;
+   }
+   public void setmAyuda_(JMenu mAyuda_) {
+      this.mAyuda_ = mAyuda_;
+   }
 
    //____________________
    // Atributos privados:
    private VentanaPrincipal laVentTmp_;
    
    private JMenu mArchivo_;
+   
+   private JMenu mAyuda_;
    //-FIN---------------
    
    
@@ -68,9 +77,14 @@ public class BarraMenu extends JMenuBar {
       // Inicializar el menœ "Archivo."
       setmArchivo_(new JMenu ("Archivo"));
       getmArchivo_().setBackground(COL_FONDO);
+      
+      // Inicializar el menœ "Ayuda."
+      setmAyuda_(new JMenu("Ayuda"));
+      getmAyuda_().setBackground(COL_FONDO);
       //getmArchivo_().addMenuListener(getLosEventos_().getAccArchivo_());
       
       this.add(getmArchivo_());
+      this.add(getmAyuda_());
       
 	}
 	//-FIN-------------------------
