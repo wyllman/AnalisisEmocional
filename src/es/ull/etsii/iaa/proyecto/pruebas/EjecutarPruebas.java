@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import es.ull.etsii.iaa.proyecto.fases.PCorpus;
+import es.ull.etsii.iaa.proyecto.interfaz.VentanaPrincipal;
 
 /**
  * Clase utilizada para realizar todas las pruebas necesarias
@@ -23,7 +24,7 @@ public class EjecutarPruebas {
     * @param args
     */
    public static void main(String[] args) {
-      PCorpus programaCorpusPrueba = new PCorpus ();
+      /*PCorpus programaCorpusPrueba = new PCorpus ();
       
       Vector<File> prueba = programaCorpusPrueba.searchFolder("doc/CorpusEntrenamiento/negativo/");
       
@@ -33,8 +34,10 @@ public class EjecutarPruebas {
          } catch (IOException e) {
             e.printStackTrace();
          }
-      }
+      }*/
       
+      new VentanaPrincipal();
+	   
       System.out.println(" --- Fin de ejecucion --- ");
    }
 }
