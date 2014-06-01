@@ -17,6 +17,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
+import java.awt.Desktop.Action;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -25,7 +26,10 @@ import javax.swing.JProgressBar;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JMenuItem;
+
+import es.ull.etsii.iaa.proyecto.fases.PCorpus;
 
 public class Main {
 
@@ -177,6 +181,9 @@ public class Main {
 		gbc_btnProcess.gridy = 2;
 		this.btnProcess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				PCorpus corpus = new PCorpus();
+				corpus.searchFolder(textPos.getText());
+				corpus.searchFolder(textNeg.getText());
 			}
 		});
 		this.panePrev.add(this.btnProcess, gbc_btnProcess);
