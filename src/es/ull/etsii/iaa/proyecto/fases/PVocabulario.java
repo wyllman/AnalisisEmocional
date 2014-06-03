@@ -15,10 +15,10 @@ import java.util.Hashtable;
  * 
  * Se usa el siguiente formato para el archivo de salida:
  * 
- * Numero de palabras:<N�mero entero> Palabra:<cadena>
+ * Numero de palabras:<Número entero> Palabra:<cadena>
  * 
- * @author Juan Hen�ndez Hern�ndez
- * @author Guillermo Rodr�guez Pardo
+ * @author Juan Henández Hernández
+ * @author Guillermo Rodríguez Pardo
  * 
  */
 public class PVocabulario {

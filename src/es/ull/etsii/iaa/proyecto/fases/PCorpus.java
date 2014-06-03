@@ -20,11 +20,11 @@ import java.util.regex.Pattern;
  * 
  * "Texto:<cadena con texto del fichero>"
  * 
- * Funcionalidad a�adida: Crear un archivo unificando los corpus de cada una de
+ * Funcionalidad añadida: Crear un archivo unificando los corpus de cada una de
  * las clases del problema (negativo - positivo).
  * 
- * @author Juan Hen�ndez Hern�ndez
- * @author Guillermo Rodr�guez Pardo
+ * @author Juan Henández Hernández
+ * @author Guillermo Rodríguez Pardo
  */
 
 public class PCorpus {
@@ -32,12 +32,20 @@ public class PCorpus {
 		C_SIMPLE, C_ALL
 	};
 
+	private Vector<File> result;
+	private String fullCorpus;
+
+	/**
+	 * Recibe un directorio y añade todos los archivos txt que contiene al
+	 * vector de archivos.
+	 * 
+	 * @param folderName
+	 * @return
+	 */
 	public Vector<File> searchFolder(String folderName) {
 		File folderTmp = new File(folderName);
-		Vector<File> result = new Vector<File>();
-		Pattern regExp = Pattern.compile(".*\\.txt$"); // Se usa para buscar los
-														// archivos que acaben
-														// con ".txt"
+		result = new Vector<File>();
+		Pattern regExp = Pattern.compile(".*\\.txt$");
 		Matcher matching;
 		boolean encontrado = false;
 		File archivoTmp;
@@ -55,7 +63,7 @@ public class PCorpus {
 				}
 			}
 			if (!encontrado) {
-				System.out.println(" Ning�n archivo .txt");
+				System.out.println(" Ningún archivo .txt");
 			}
 		} else {
 			System.out.println(" --- + ERROR. La carpeta indicada no existe.");
@@ -66,31 +74,31 @@ public class PCorpus {
 	}
 
 	public void addFile(File inFile, FileWriter outFile) {
-		FileReader fileRe = null;
-		BufferedReader buffRe = null;
-		PrintWriter printWr = null;
+		FileReader fileReader = null;
+		BufferedReader buffReader = null;
+		PrintWriter printWriter = null;
 		String line;
 
 		try {
-			fileRe = new FileReader(inFile);
-			buffRe = new BufferedReader(fileRe);
-			printWr = new PrintWriter(outFile);
+			fileReader = new FileReader(inFile);
+			buffReader = new BufferedReader(fileReader);
+			printWriter = new PrintWriter(outFile);
 
-			if ((line = buffRe.readLine()) != null) {
+			if ((line = buffReader.readLine()) != null) {
 				System.out.println(line);
-				printWr.println("Texto: " + line);
+				printWriter.println("Texto: " + line);
 
-				while ((line = buffRe.readLine()) != null) {
+				while ((line = buffReader.readLine()) != null) {
 					System.out.println(line);
-					printWr.println(line);
+					printWriter.println(line);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (null != fileRe) {
-					fileRe.close();
+				if (null != fileReader) {
+					fileReader.close();
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
@@ -119,42 +127,37 @@ public class PCorpus {
 		}
 	}
 
-	public void createCorpusTodo(String nameFilePos, String nameFileNeg,
-			String nameOutFile) {
-		FileReader filePos = null;
-		FileReader fileNeg = null;
-		FileWriter outFile = null;
-		BufferedReader buffRe = null;
-		PrintWriter printWr = null;
+	public void createCorpus(String output) {
+		FileReader inputFile = null;
+		FileWriter outputFile = null;
+		BufferedReader buffReader = null;
+		PrintWriter writer = null;
 		String line;
 
+		fullCorpus = output;
+
 		try {
-			filePos = new FileReader(nameFilePos);
-			fileNeg = new FileReader(nameFileNeg);
-			outFile = new FileWriter(nameOutFile);
-			printWr = new PrintWriter(outFile);
-
-			buffRe = new BufferedReader(filePos);
-			while ((line = buffRe.readLine()) != null) {
-				printWr.println(line);
-			}
-
-			buffRe = new BufferedReader(fileNeg);
-			while ((line = buffRe.readLine()) != null) {
-				printWr.println(line);
+			outputFile = new FileWriter(output);
+			for (File file : result) {
+				System.out.println(file.toString());
+				inputFile = new FileReader(file);
+				buffReader = new BufferedReader(inputFile);
+				while ((line = buffReader.readLine()) != null) {
+					outputFile.write(line);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (null != filePos) {
-					filePos.close();
+				if (inputFile != null) {
+					inputFile.close();
 				}
-				if (null != fileNeg) {
-					fileNeg.close();
+				if (outputFile != null) {
+					outputFile.close();
 				}
-				if (null != outFile) {
-					outFile.close();
+				if (buffReader != null) {
+					buffReader.close();
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
