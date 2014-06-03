@@ -180,7 +180,7 @@ public class Main {
 		gbc_btnProcess.gridy = 2;
 		this.btnProcess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PCorpus corpus = new PCorpus("./txt/");
+				PCorpus corpus = new PCorpus("./doc/CorpusEntrenamiento/");
 				corpus.searchFolder(textPos.getText());
 				corpus.searchFolder(textNeg.getText());
 				if (corpus.createCorpora() == 1) {
