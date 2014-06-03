@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
 
 import es.ull.etsii.iaa.proyecto.fases.PCorpus;
+import es.ull.etsii.iaa.proyecto.fases.PVocabulario;
 
 public class Main {
 
@@ -36,8 +37,8 @@ public class Main {
 	private final JMenuBar menuBar = new JMenuBar();
 	private final JMenu mnArchivo = new JMenu("Archivo");
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	private final JPanel panePrev = new JPanel();
-	private final JPanel paneLearn = new JPanel();
+	private final JPanel paneCorpora = new JPanel();
+	private final JPanel paneVocab = new JPanel();
 	private final JPanel paneClassification = new JPanel();
 	private final JButton btnNeg = new JButton("Negativo");
 	private final JButton btnPos = new JButton("Positivo");
@@ -46,6 +47,10 @@ public class Main {
 	private final JButton btnProcess = new JButton("Procesar corpus");
 	private final JProgressBar progressBar = new JProgressBar();
 	private final JMenuItem mntmSalir = new JMenuItem("Salir");
+	private PCorpus corpus;
+	private PVocabulario vocabulario;
+	private final JButton btnProcVoc = new JButton("Procesar Vocabulario");
+	private final JButton btnDumpVoc = new JButton("Volcar a archivo");
 
 	/**
 	 * Launch the application.
@@ -94,15 +99,15 @@ public class Main {
 		frmAnalisisEmocional.getContentPane().add(this.tabbedPane,
 				BorderLayout.CENTER);
 
-		this.tabbedPane.addTab("Previo", null, this.panePrev, null);
-		GridBagLayout gbl_panePrev = new GridBagLayout();
-		gbl_panePrev.columnWidths = new int[] { 0, 314, 0, 0, 0 };
-		gbl_panePrev.rowHeights = new int[] { 55, 55, 0, 0, 0 };
-		gbl_panePrev.columnWeights = new double[] { 0.0, 1.0, 1.0, 0.0,
+		this.tabbedPane.addTab("Corpora", null, this.paneCorpora, null);
+		GridBagLayout gbl_paneCorpora = new GridBagLayout();
+		gbl_paneCorpora.columnWidths = new int[] { 0, 314, 0, 0, 0 };
+		gbl_paneCorpora.rowHeights = new int[] { 55, 55, 0, 0, 0 };
+		gbl_paneCorpora.columnWeights = new double[] { 0.0, 1.0, 1.0, 0.0,
 				Double.MIN_VALUE };
-		gbl_panePrev.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
+		gbl_paneCorpora.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
-		this.panePrev.setLayout(gbl_panePrev);
+		this.paneCorpora.setLayout(gbl_paneCorpora);
 		this.textPos.setEditable(false);
 		this.textPos.setColumns(10);
 
@@ -111,7 +116,7 @@ public class Main {
 		gbc_textPos.insets = new Insets(0, 0, 5, 5);
 		gbc_textPos.gridx = 1;
 		gbc_textPos.gridy = 0;
-		this.panePrev.add(this.textPos, gbc_textPos);
+		this.paneCorpora.add(this.textPos, gbc_textPos);
 
 		GridBagConstraints gbc_btnPos = new GridBagConstraints();
 		gbc_btnPos.insets = new Insets(0, 0, 5, 5);
@@ -136,7 +141,7 @@ public class Main {
 				}
 			}
 		});
-		this.panePrev.add(this.btnPos, gbc_btnPos);
+		this.paneCorpora.add(this.btnPos, gbc_btnPos);
 		this.textNeg.setEditable(false);
 		this.textNeg.setColumns(10);
 
@@ -145,7 +150,7 @@ public class Main {
 		gbc_textNeg.insets = new Insets(0, 0, 5, 5);
 		gbc_textNeg.gridx = 1;
 		gbc_textNeg.gridy = 1;
-		this.panePrev.add(this.textNeg, gbc_textNeg);
+		this.paneCorpora.add(this.textNeg, gbc_textNeg);
 
 		GridBagConstraints gbc_btnNeg = new GridBagConstraints();
 		gbc_btnNeg.insets = new Insets(0, 0, 5, 5);
@@ -170,7 +175,7 @@ public class Main {
 		});
 		this.btnNeg
 				.setToolTipText("Selecciona el directorio con el corpus negativo");
-		this.panePrev.add(this.btnNeg, gbc_btnNeg);
+		this.paneCorpora.add(this.btnNeg, gbc_btnNeg);
 
 		GridBagConstraints gbc_btnProcess = new GridBagConstraints();
 		gbc_btnProcess.gridwidth = 2;
@@ -180,7 +185,7 @@ public class Main {
 		gbc_btnProcess.gridy = 2;
 		this.btnProcess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PCorpus corpus = new PCorpus("./doc/CorpusEntrenamiento/");
+				corpus = new PCorpus("./doc/CorpusEntrenamiento/");
 				corpus.searchFolder(textPos.getText());
 				corpus.searchFolder(textNeg.getText());
 				if (corpus.createCorpora() == 1) {
@@ -190,7 +195,7 @@ public class Main {
 				}
 			}
 		});
-		this.panePrev.add(this.btnProcess, gbc_btnProcess);
+		this.paneCorpora.add(this.btnProcess, gbc_btnProcess);
 
 		GridBagConstraints gbc_progressBar = new GridBagConstraints();
 		gbc_progressBar.insets = new Insets(0, 0, 0, 5);
@@ -198,10 +203,35 @@ public class Main {
 		gbc_progressBar.gridwidth = 2;
 		gbc_progressBar.gridx = 1;
 		gbc_progressBar.gridy = 3;
-		this.panePrev.add(this.progressBar, gbc_progressBar);
+		this.paneCorpora.add(this.progressBar, gbc_progressBar);
 
-		this.tabbedPane.addTab("Aprendizaje", null, this.paneLearn, null);
-		this.paneLearn.setLayout(new GridLayout(1, 0, 0, 0));
+		this.tabbedPane.addTab("Vocabulario", null, this.paneVocab, null);
+		GridBagLayout gbl_paneVocab = new GridBagLayout();
+		gbl_paneVocab.columnWidths = new int[]{247, 0};
+		gbl_paneVocab.rowHeights = new int[]{64, 52, 0};
+		gbl_paneVocab.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_paneVocab.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		this.paneVocab.setLayout(gbl_paneVocab);
+		GridBagConstraints gbc_btnProcVoc = new GridBagConstraints();
+		gbc_btnProcVoc.insets = new Insets(0, 0, 5, 0);
+		gbc_btnProcVoc.gridx = 0;
+		gbc_btnProcVoc.gridy = 0;
+		this.btnProcVoc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				vocabulario = new PVocabulario(corpus.getFullCorpus().toString());
+			}
+		});
+		this.paneVocab.add(this.btnProcVoc, gbc_btnProcVoc);
+		
+		GridBagConstraints gbc_btnDumpVoc = new GridBagConstraints();
+		gbc_btnDumpVoc.gridx = 0;
+		gbc_btnDumpVoc.gridy = 1;
+		this.btnDumpVoc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				vocabulario.dumpToFile(corpus.getCorporaDirectory() + "/vocabulario.txt");
+			}
+		});
+		this.paneVocab.add(this.btnDumpVoc, gbc_btnDumpVoc);
 
 		this.tabbedPane.addTab("Clasificación", null, this.paneClassification,
 				null);

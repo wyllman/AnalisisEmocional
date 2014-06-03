@@ -6,8 +6,10 @@ package es.ull.etsii.iaa.proyecto.fases;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Clase que toma como entrada el corpus conjunto de todas las clases y genera
@@ -27,18 +29,24 @@ public class PVocabulario {
 	public PVocabulario(String file) {
 		FileReader fRead = null;
 		BufferedReader bufRead = null;
+		Pattern wordRE = Pattern.compile("\\w");
 		String line;
+		String word;
+		
 		try {
 			fRead = new FileReader(file);
 			bufRead = new BufferedReader(fRead);
 
 			while ((line = bufRead.readLine()) != null) {
-				String[] words = line.split(" ");
+				String[] words = line.split("[^a-zA-Z]+");
 				for (int i = 0; i < words.length; ++i) {
-					if (vocabulario.containsKey(words[i])) {
-						vocabulario.put(words[i], vocabulario.get(words[i]) + 1);
-					} else {
-						vocabulario.put(words[i], 1);
+					word = words[i].toLowerCase();
+					if (word.length() > 1) {
+						if (vocabulario.containsKey(word)) {
+							vocabulario.put(word, vocabulario.get(word) + 1);
+						} else {
+							vocabulario.put(word, 1);
+						}
 					}
 				}
 			}
@@ -63,9 +71,11 @@ public class PVocabulario {
 		FileWriter fWrite = null;
 		try {
 			fWrite = new FileWriter(fileName);
-			Enumeration<Integer> elements = vocabulario.elements();
-			while(elements.hasMoreElements()) {
-				fWrite.write(elements.nextElement());
+			Iterator<Map.Entry<String, Integer>> it =
+					vocabulario.entrySet().iterator();
+			while(it.hasNext()) {
+				Map.Entry<String, Integer> word = it.next();
+				fWrite.write(word.getKey() + ": " + word.getValue() + "\n");
 			}
 		} catch (Exception e) {
 			
