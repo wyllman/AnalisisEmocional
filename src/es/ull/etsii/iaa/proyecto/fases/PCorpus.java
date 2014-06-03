@@ -140,7 +140,7 @@ public class PCorpus {
 			outputFile = new FileWriter(output);
 			for (File file : result) {
 				System.out.println(file.toString());
-				inputFile = new FileReader(file);
+				inputFile = new FileReader(file.getPath());
 				buffReader = new BufferedReader(inputFile);
 				while ((line = buffReader.readLine()) != null) {
 					outputFile.write(line);
