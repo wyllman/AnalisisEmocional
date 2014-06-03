@@ -184,7 +184,7 @@ public class Main {
 				PCorpus corpus = new PCorpus();
 				corpus.searchFolder(textPos.getText());
 				corpus.searchFolder(textNeg.getText());
-				corpus.createCorpus("./out.txt");
+				corpus.createCorpus("./txt/full.txt");
 			}
 		});
 		this.panePrev.add(this.btnProcess, gbc_btnProcess);

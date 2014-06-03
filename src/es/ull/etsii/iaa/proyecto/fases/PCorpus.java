@@ -57,7 +57,7 @@ public class PCorpus {
 			for (int i = 0; i < tamanio; ++i) {
 				matching = regExp.matcher(resultadoC[i]);
 				if (matching.matches()) {
-					archivoTmp = new File(resultadoC[i]);
+					archivoTmp = new File(folderName + "/" + resultadoC[i]);
 					result.add(archivoTmp);
 					encontrado = true;
 				}
@@ -139,8 +139,7 @@ public class PCorpus {
 		try {
 			outputFile = new FileWriter(output);
 			for (File file : result) {
-				System.out.println(file.toString());
-				inputFile = new FileReader(file.getPath());
+				inputFile = new FileReader(file);
 				buffReader = new BufferedReader(inputFile);
 				while ((line = buffReader.readLine()) != null) {
 					outputFile.write(line);
