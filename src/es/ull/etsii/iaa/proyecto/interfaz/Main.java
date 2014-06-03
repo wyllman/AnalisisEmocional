@@ -39,7 +39,7 @@ public class Main {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private final JPanel paneCorpora = new JPanel();
 	private final JPanel paneVocab = new JPanel();
-	private final JPanel paneClassification = new JPanel();
+	private final JPanel paneLearning = new JPanel();
 	private final JButton btnNeg = new JButton("Negativo");
 	private final JButton btnPos = new JButton("Positivo");
 	private final JTextField textPos = new JTextField();
@@ -233,9 +233,9 @@ public class Main {
 		});
 		this.paneVocab.add(this.btnDumpVoc, gbc_btnDumpVoc);
 
-		this.tabbedPane.addTab("Clasificación", null, this.paneClassification,
+		this.tabbedPane.addTab("Aprendizaje", null, this.paneLearning,
 				null);
-		this.paneClassification.setLayout(new GridLayout(1, 0, 0, 0));
+		this.paneLearning.setLayout(new GridLayout(1, 0, 0, 0));
 	}
 
 }

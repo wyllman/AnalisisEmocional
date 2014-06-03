@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.regex.Pattern;
+import java.util.TreeMap;
 
 /**
  * Clase que toma como entrada el corpus conjunto de todas las clases y genera
@@ -24,12 +24,11 @@ import java.util.regex.Pattern;
  * 
  */
 public class PVocabulario {
-	private final Hashtable<String, Integer> vocabulario = new Hashtable<String, Integer>();
+	private final TreeMap<String, Integer> vocabulario = new TreeMap<String, Integer>();
 
 	public PVocabulario(String file) {
 		FileReader fRead = null;
 		BufferedReader bufRead = null;
-		Pattern wordRE = Pattern.compile("\\w");
 		String line;
 		String word;
 		
