@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,8 +31,42 @@ public class PCorpus {
 		C_SIMPLE, C_ALL
 	};
 
-	private Vector<File> result;
-	private String fullCorpus;
+	private Vector<File> fileVector = new Vector<File>();;
+	private File corporaDirectory;
+	private File fullCorpus;
+	private File positiveCorpus;
+	private File negativeCorpus;
+
+	public File getFullCorpus() {
+		return fullCorpus;
+	}
+
+	public File getPositiveCorpus() {
+		return positiveCorpus;
+	}
+
+	public File getNegativeCorpus() {
+		return negativeCorpus;
+	}
+
+	public File getCorporaDirectory() {
+		return corporaDirectory;
+	}
+
+	public void setCorporaDirectory(File corporaDirectory) throws IOException {
+		if (corporaDirectory.isDirectory()) {
+			this.corporaDirectory = corporaDirectory;
+		} else {
+			throw new IOException("No es un directorio.");
+		}
+	}
+	
+	public PCorpus(String destinationDir) {
+		corporaDirectory = new File(destinationDir);
+		fullCorpus = new File(corporaDirectory + "/fullCorpus.txt");
+		positiveCorpus = new File(corporaDirectory + "/positiveCorpus.txt");
+		negativeCorpus = new File(corporaDirectory + "/negativeCorpus.txt");
+	}
 
 	/**
 	 * Recibe un directorio y añade todos los archivos txt que contiene al
@@ -44,21 +77,13 @@ public class PCorpus {
 	 */
 	public Vector<File> searchFolder(String folderName) {
 		File folderTmp = new File(folderName);
-		result = new Vector<File>();
 		Pattern regExp = Pattern.compile(".*\\.txt$");
-		Matcher matching;
 		boolean encontrado = false;
-		File archivoTmp;
-
-		if (folderTmp.exists()) {
-			String[] resultadoC = folderTmp.list();
-			int tamanio = resultadoC.length;
-
-			for (int i = 0; i < tamanio; ++i) {
-				matching = regExp.matcher(resultadoC[i]);
-				if (matching.matches()) {
-					archivoTmp = new File(folderName + "/" + resultadoC[i]);
-					result.add(archivoTmp);
+		
+		if (folderTmp.exists() && folderTmp.isDirectory()) {			
+			for (String file : folderTmp.list()) {
+				if (regExp.matcher(file).matches()) {
+					fileVector.add(new File(folderName + "/" + file.toString()));
 					encontrado = true;
 				}
 			}
@@ -66,83 +91,38 @@ public class PCorpus {
 				System.out.println(" Ningún archivo .txt");
 			}
 		} else {
-			System.out.println(" --- + ERROR. La carpeta indicada no existe.");
+			System.out.println(" --- + ERROR. La carpeta indicada no existe " +
+					"o no es un directorio.");
 			System.out.println(" --- +++++++ Clase: PCorpus Fucion: public "
 					+ "Vector<File> buscarCarpeta (String nombreCarpeta)");
 		}
-		return result;
+		return fileVector;
 	}
 
-	public void addFile(File inFile, FileWriter outFile) {
-		FileReader fileReader = null;
-		BufferedReader buffReader = null;
-		PrintWriter printWriter = null;
-		String line;
-
-		try {
-			fileReader = new FileReader(inFile);
-			buffReader = new BufferedReader(fileReader);
-			printWriter = new PrintWriter(outFile);
-
-			if ((line = buffReader.readLine()) != null) {
-				System.out.println(line);
-				printWriter.println("Texto: " + line);
-
-				while ((line = buffReader.readLine()) != null) {
-					System.out.println(line);
-					printWriter.println(line);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (null != fileReader) {
-					fileReader.close();
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-	}
-
-	public void addFolderFiles(Vector<File> filesGroup, String nameOutFile) {
-		FileWriter outFile = null;
-		try {
-			outFile = new FileWriter(nameOutFile);
-			for (int i = 0; i < filesGroup.size(); ++i) {
-				addFile(filesGroup.get(i), outFile);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (null != outFile) {
-					outFile.close();
-				}
-				filesGroup.removeAllElements();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-	}
-
-	public void createCorpus(String output) {
+	public int createCorpora() {
 		FileReader inputFile = null;
 		FileWriter outputFile = null;
+		FileWriter posOutputFile = null;
+		FileWriter negOutputFile = null;
 		BufferedReader buffReader = null;
-		PrintWriter writer = null;
+		Pattern positiveRE = Pattern.compile(".*pos.*");
+		Pattern negativeRE = Pattern.compile(".*neg.*");
 		String line;
 
-		fullCorpus = output;
-
 		try {
-			outputFile = new FileWriter(output);
-			for (File file : result) {
+			outputFile = new FileWriter(fullCorpus);
+			posOutputFile = new FileWriter(positiveCorpus);
+			negOutputFile = new FileWriter(negativeCorpus);
+			for (File file : fileVector) {
 				inputFile = new FileReader(file);
 				buffReader = new BufferedReader(inputFile);
 				while ((line = buffReader.readLine()) != null) {
 					outputFile.write(line);
+					if (positiveRE.matcher(file.toString()).matches()) {
+						posOutputFile.write(line);
+					} else if (negativeRE.matcher(file.toString()).matches()) {
+						negOutputFile.write(line);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -158,9 +138,16 @@ public class PCorpus {
 				if (buffReader != null) {
 					buffReader.close();
 				}
+				if (posOutputFile != null) {
+					posOutputFile.close();
+				}
+				if (negOutputFile != null) {
+					negOutputFile.close();
+				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
+		return 1;
 	}
 }

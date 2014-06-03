@@ -17,7 +17,6 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import java.awt.Desktop.Action;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -181,10 +180,14 @@ public class Main {
 		gbc_btnProcess.gridy = 2;
 		this.btnProcess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PCorpus corpus = new PCorpus();
+				PCorpus corpus = new PCorpus("./txt/");
 				corpus.searchFolder(textPos.getText());
 				corpus.searchFolder(textNeg.getText());
-				corpus.createCorpus("./txt/full.txt");
+				if (corpus.createCorpora() == 1) {
+					progressBar.setStringPainted(true);
+					progressBar.setString("100%");
+					progressBar.setValue(100);
+				}
 			}
 		});
 		this.panePrev.add(this.btnProcess, gbc_btnProcess);

@@ -3,19 +3,14 @@
  */
 package es.ull.etsii.iaa.proyecto.pruebas;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Vector;
-
-import es.ull.etsii.iaa.proyecto.fases.PCorpus;
 import es.ull.etsii.iaa.proyecto.interfaz.VentanaPrincipal;
 
 /**
  * Clase utilizada para realizar todas las pruebas necesarias
  * para los subprogramas generados.
  * 
- * @author Juan Hen‡ndez Hern‡ndez
- * @author Guillermo Rodr’guez Pardo
+ * @author Juan Henï¿½ndez Hernï¿½ndez
+ * @author Guillermo Rodrï¿½guez Pardo
  *
  */
 public class EjecutarPruebas {

@@ -7,15 +7,13 @@ import java.awt.Color;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 
 import es.ull.etsii.iaa.proyecto.interfaz.VentanaPrincipal;
 
 
 /**
- * @author Juan Hen‡ndez Hern‡ndez
- * @author Guillermo Rodr’guez Pardo
+ * @author Juan Henï¿½ndez Hernï¿½ndez
+ * @author Guillermo Rodrï¿½guez Pardo
  *
  */
 @SuppressWarnings("serial")
@@ -66,7 +64,7 @@ public class BarraMenu extends JMenuBar {
 
 
 //__________________
-   // MŽtodos privados:
+   // Mï¿½todos privados:
    private void inicializar (VentanaPrincipal laVentana, int pos_x, int pos_y, 
                              int ancho, int alto) {
       setLaVentTmp_(laVentana);
@@ -74,11 +72,11 @@ public class BarraMenu extends JMenuBar {
       setBackground (COL_FONDO);
       setBounds (pos_x, pos_y, ancho, alto);
 
-      // Inicializar el menœ "Archivo."
+      // Inicializar el menï¿½ "Archivo."
       setmArchivo_(new JMenu ("Archivo"));
       getmArchivo_().setBackground(COL_FONDO);
       
-      // Inicializar el menœ "Ayuda."
+      // Inicializar el menï¿½ "Ayuda."
       setmAyuda_(new JMenu("Ayuda"));
       getmAyuda_().setBackground(COL_FONDO);
       //getmArchivo_().addMenuListener(getLosEventos_().getAccArchivo_());
