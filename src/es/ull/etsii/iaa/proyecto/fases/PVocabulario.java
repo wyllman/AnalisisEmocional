@@ -72,9 +72,10 @@ public class PVocabulario {
 			fWrite = new FileWriter(fileName);
 			Iterator<Map.Entry<String, Integer>> it =
 					vocabulario.entrySet().iterator();
+			fWrite.write("Número de palabras: " + vocabulario.size() + "\n");
 			while(it.hasNext()) {
 				Map.Entry<String, Integer> word = it.next();
-				fWrite.write(word.getKey() + ": " + word.getValue() + "\n");
+				fWrite.write("Palabra: " + word.getKey() + "\n");
 			}
 		} catch (Exception e) {
 			

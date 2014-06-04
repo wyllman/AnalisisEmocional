@@ -33,13 +33,17 @@ import es.ull.etsii.iaa.proyecto.fases.PVocabulario;
 
 public class Main {
 
+	private PCorpus corpus;
+	private PVocabulario vocabulario;
+	private boolean posDirChosen = false;
+	private boolean negDirChosen = false;
 	private JFrame frmAnalisisEmocional;
 	private final JMenuBar menuBar = new JMenuBar();
 	private final JMenu mnArchivo = new JMenu("Archivo");
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private final JPanel paneCorpora = new JPanel();
 	private final JPanel paneVocab = new JPanel();
-	private final JPanel paneLearning = new JPanel();
+	private final JPanel paneStimation = new JPanel();
 	private final JButton btnNeg = new JButton("Negativo");
 	private final JButton btnPos = new JButton("Positivo");
 	private final JTextField textPos = new JTextField();
@@ -47,8 +51,6 @@ public class Main {
 	private final JButton btnProcess = new JButton("Procesar corpus");
 	private final JProgressBar progressBar = new JProgressBar();
 	private final JMenuItem mntmSalir = new JMenuItem("Salir");
-	private PCorpus corpus;
-	private PVocabulario vocabulario;
 	private final JButton btnProcVoc = new JButton("Procesar Vocabulario");
 	private final JButton btnDumpVoc = new JButton("Volcar a archivo");
 
@@ -134,6 +136,10 @@ public class Main {
 					chooser.setAcceptAllFileFilterUsed(false);
 					if (chooser.showOpenDialog(btnPos) == JFileChooser.APPROVE_OPTION) {
 						textPos.setText(chooser.getSelectedFile().toString());
+						posDirChosen = true;
+						if (posDirChosen && negDirChosen) {
+							btnProcess.setEnabled(true);
+						}
 					}
 
 				} catch (Exception exc) {
@@ -166,6 +172,10 @@ public class Main {
 					chooser.setAcceptAllFileFilterUsed(false);
 					if (chooser.showOpenDialog(btnPos) == JFileChooser.APPROVE_OPTION) {
 						textNeg.setText(chooser.getSelectedFile().toString());
+						negDirChosen = true;
+						if (posDirChosen && negDirChosen) {
+							btnProcess.setEnabled(true);
+						}
 					}
 
 				} catch (Exception exc) {
@@ -183,15 +193,21 @@ public class Main {
 		gbc_btnProcess.insets = new Insets(0, 0, 5, 5);
 		gbc_btnProcess.gridx = 1;
 		gbc_btnProcess.gridy = 2;
+		this.btnProcess.setEnabled(false);
 		this.btnProcess.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				corpus = new PCorpus("./doc/CorpusEntrenamiento/");
-				corpus.searchFolder(textPos.getText());
-				corpus.searchFolder(textNeg.getText());
-				if (corpus.createCorpora() == 1) {
-					progressBar.setStringPainted(true);
-					progressBar.setString("100%");
-					progressBar.setValue(100);
+				try {
+					corpus = new PCorpus("./doc/CorpusEntrenamiento/");
+					corpus.searchFolder(textPos.getText());
+					corpus.searchFolder(textNeg.getText());
+					if (corpus.createCorpora() == 1) {
+						progressBar.setStringPainted(true);
+						progressBar.setString("100%");
+						progressBar.setValue(100);
+						tabbedPane.setEnabledAt(1, true);
+					}
+				} catch (Exception exc) {
+					exc.printStackTrace();
 				}
 			}
 		});
@@ -206,10 +222,11 @@ public class Main {
 		this.paneCorpora.add(this.progressBar, gbc_progressBar);
 
 		this.tabbedPane.addTab("Vocabulario", null, this.paneVocab, null);
+		this.tabbedPane.setEnabledAt(1, false);
 		GridBagLayout gbl_paneVocab = new GridBagLayout();
 		gbl_paneVocab.columnWidths = new int[]{247, 0};
 		gbl_paneVocab.rowHeights = new int[]{64, 52, 0};
-		gbl_paneVocab.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_paneVocab.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_paneVocab.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		this.paneVocab.setLayout(gbl_paneVocab);
 		GridBagConstraints gbc_btnProcVoc = new GridBagConstraints();
@@ -219,6 +236,7 @@ public class Main {
 		this.btnProcVoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				vocabulario = new PVocabulario(corpus.getFullCorpus().toString());
+				tabbedPane.setEnabledAt(2, true);
 			}
 		});
 		this.paneVocab.add(this.btnProcVoc, gbc_btnProcVoc);
@@ -233,9 +251,10 @@ public class Main {
 		});
 		this.paneVocab.add(this.btnDumpVoc, gbc_btnDumpVoc);
 
-		this.tabbedPane.addTab("Aprendizaje", null, this.paneLearning,
+		this.tabbedPane.addTab("Estimación", null, this.paneStimation,
 				null);
-		this.paneLearning.setLayout(new GridLayout(1, 0, 0, 0));
+		this.tabbedPane.setEnabledAt(2, false);
+		this.paneStimation.setLayout(new GridLayout(1, 0, 0, 0));
 	}
 
 }

@@ -62,9 +62,9 @@ public class PCorpus {
 	
 	public PCorpus(String destinationDir) {
 		corporaDirectory = new File(destinationDir);
-		fullCorpus = new File(corporaDirectory + "/fullCorpus.txt");
-		positiveCorpus = new File(corporaDirectory + "/positiveCorpus.txt");
-		negativeCorpus = new File(corporaDirectory + "/negativeCorpus.txt");
+		fullCorpus = new File(corporaDirectory + "/corpustodo.txt");
+		positiveCorpus = new File(corporaDirectory + "/corpuspos.txt");
+		negativeCorpus = new File(corporaDirectory + "/corpusneg.txt");
 	}
 
 	/**
